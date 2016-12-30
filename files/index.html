@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Code in the dark viewer</title>
+    <link rel="stylesheet" href="/main.css">
+    <style media="screen">
+      body {
+        margin:0;
+        padding: 0;
+      }
+      #main {
+        width: 100%;
+      }
+      .entry {
+        width: 40%;
+        float:left;
+      }
+      .entry h1 {
+
+      }
+      .entry iframe {
+        width: 100%;
+        height: 400px;
+      }
+    </style>
+
+
+  </head>
+  <body>
+
+    <div class="container" id="main">
+
+    </div>
+
+    <script id="entry-template" type="text/x-handlebars-template">
+      <div class="entry">
+        <h1>{{title}}</h1>
+        <iframe name="{{name}}" id="{{id}}" src="{{src}}"/>
+      </div>
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+        var frames = [];
+
+        var initFrames = function() {
+
+          var source   = $("#entry-template").html();
+          var template = Handlebars.compile(source);
+
+          for(var i = 0; i < frames.length; i++) {
+            var context = {
+              title: frames[i].user,
+              name: frames[i].user,
+              id: frames[i].user,
+              src: frames[i].file
+            }
+            var html    = $(template(context)).appendTo('#main');
+          }
+        }
+
+
+        $.getJSON('http://localhost:3000/users').then(function(userListObject) {
+          var files = userListObject.files;
+          for(var i = 0; i < files.length; i++) {
+            frames.push({
+              user: files[i].substring(0, files[i].indexOf('.')),
+              file: files[i]
+            });
+          }
+          initFrames();
+        })
+
+      });
+    </script>
+
+  </body>
+</html>
