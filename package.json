@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "listen": "node index.js",
-    "start": "./node_modules/livereloadx/bin/livereloadx.js -s -p 4000 ./files/"
+    "start": "node ./node_modules/livereloadx/bin/livereloadx.js -s -p 4000 ./files/"
   },
   "author": "Oscar Chinellato",
   "license": "MIT",
