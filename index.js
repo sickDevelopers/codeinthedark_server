@@ -1,6 +1,7 @@
 var express = require('express');
 var fileUpload = require('express-fileupload');
 var bodyParser  = require("body-parser");
+var xss = require('node-xss').clean;
 var fs = require('fs');
 var app = express();
 
@@ -24,14 +25,25 @@ app.post('/upload', function(req, res) {
       res.status(500).send("ti fa davero?");
     }
 
-    sampleFile.mv(__dirname + '/files/' + req.body.user + '.html', function(err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-        else {
-            res.send('File uploaded for '+ req.body.user +'!');
-        }
+    var content = xss(sampleFile.data.toString());
+
+    fs.writeFile(__dirname + '/files/' + req.body.user + '.html', content, function (err) {
+      if (err) {
+          res.status(500).send(err);
+      }
+      else {
+          res.send('File uploaded for '+ req.body.user +'!');
+      }
     });
+
+    // sampleFile.mv(__dirname + '/files/' + req.body.user + '.html', function(err) {
+    //     if (err) {
+    //         res.status(500).send(err);
+    //     }
+    //     else {
+    //         res.send('File uploaded for '+ req.body.user +'!');
+    //     }
+    // });
 });
 
 
