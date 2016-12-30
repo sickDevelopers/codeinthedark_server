@@ -25,7 +25,7 @@ app.post('/upload', function(req, res) {
       res.status(500).send("ti fa davero?");
     }
 
-    var content = xss(sampleFile.data.toString());
+    var content = sampleFile.data.toString();
 
     fs.writeFile(__dirname + '/files/' + req.body.user + '.html', content, function (err) {
       if (err) {
